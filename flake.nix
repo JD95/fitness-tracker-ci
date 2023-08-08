@@ -9,33 +9,39 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, backend, frontend, ... }@inputs:
-    flake-utils.lib.eachSystem ["x86_64-linux"] (system:
     let 
-      nixpkgs = inputs.nixpkgs.legacyPackages.${system};
-      backendDrv = backend.outputs.packages.${system}.default;
-      frontendDrv = frontend.outputs.packages.${system}.default;
-    in {
-      packages.default = nixpkgs.stdenv.mkDerivation {
-        name = "fitness-tracker";
-
-        buildInputs = [ backendDrv frontendDrv ];
-     
-        backend = backendDrv; 
-        frontend = frontendDrv; 
-
-        unpackPhase = ''
-          printenv
-          mkdir -p out
-          mkdir -p out/bin/
-          mkdir -p out/bin/frontend
-          cp -r $backend/bin/* out/bin
-          cp -r $frontend/* out/bin/frontend 
-          '';
-
-        installPhase = ''
-          mkdir -p $out
-          cp -r out/* $out
-        '';
+      package = system: drvAttrs {
+        nixpkgs = inputs.nixpkgs.legacyPackages.${system};
+        backendDrv = backend.outputs.packages.${system}.default;
+        frontendDrv = frontend.outputs.packages.${system}.default;
       };
-  });
+
+      drvAttrs = { nixpkgs, backendDrv, frontendDrv }:
+        nixpkgs.stdenv.mkDerivation {
+          name = "fitness-tracker";
+
+          buildInputs = [ backendDrv frontendDrv ];
+       
+          backend = backendDrv; 
+          frontend = frontendDrv; 
+
+          unpackPhase = ''
+            printenv
+            mkdir -p out
+            mkdir -p out/bin/
+            mkdir -p out/bin/frontend
+            cp -r $backend/bin/* out/bin
+            cp -r $frontend/* out/bin/frontend 
+            '';
+
+          installPhase = ''
+            mkdir -p $out
+            cp -r out/* $out
+          '';
+      };
+
+    in {
+      packages."x86_64-linux".default = package "x86_64-linux";
+      hydraJobs = { inherit (self) packages; };
+    };
 }
