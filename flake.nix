@@ -12,25 +12,30 @@
     flake-utils.lib.eachSystem ["x86_64-linux"] (system:
     let 
       nixpkgs = inputs.nixpkgs.legacyPackages.${system};
+      backendDrv = backend.outputs.packages.${system}.default;
+      frontendDrv = frontend.outputs.packages.${system}.default;
     in {
       packages.default = nixpkgs.stdenv.mkDerivation {
         name = "fitness-tracker";
 
-        # src = ./server/flake.nix ./frontend/flake.nix;
-        buildInputs = [ 
-          backend.packages.${system}.default
-          frontend.packages.${system}.default
-        ];
+        buildInputs = [ backendDrv frontendDrv ];
+     
+        backend = backendDrv; 
+        frontend = frontendDrv; 
+
         unpackPhase = ''
-          cp -r $backend .
-          mkdir frontend
-          cp -r $frontend frontend/
+          printenv
+          mkdir -p out
+          mkdir -p out/bin/
+          mkdir -p out/bin/frontend
+          cp -r $backend/bin/* out/bin
+          cp -r $frontend/* out/bin/frontend 
           '';
+
         installPhase = ''
           mkdir -p $out
-          mv fitness-server $out/
-          mv frontend $out/frontend
-          '';
+          cp -r out/* $out
+        '';
       };
   });
 }
