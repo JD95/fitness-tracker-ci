@@ -41,6 +41,37 @@
 
     in {
       packages."x86_64-linux".default = package "x86_64-linux";
-      hydraJobs = { inherit (self) packages; };
+
+      packages."x86_64-linux".docker = nixpkgs.dockerTools.buildImage {
+        name = "fitness-server";
+
+        tag = "latest";
+
+        fromImage = nixpkgs.dockerTools.pullImage {
+          imageName = "frolvlad/alpine-glibc";
+          finalImageName = "frolvlad/alpine-glibc";
+          finalImageTag = "latest";
+          imageDigest = "sha256:bd63755f76ec0a8192402bd3873aff96202c21edc5c2504e4bb927430fcfd211";
+          sha256 = "1vpzmfp2bv4fzsv3agdsbwswbf2mdzv2arxcqs9jirr6adckl7qb";
+          os = "linux";
+          arch = "x86_64";
+        };
+
+        copyToRoot = nixpkgs.buildEnv {
+          name = "image-root";
+          paths = [ backendDrv frontendDrv ];
+          pathsToLink = [ "/bin" ];
+        };
+
+        extraCommands = ''
+        apk add sqlite sqlite-dev gmp
+        '';
+
+        config = {
+          Cmd = [ "fitness-tracker" ];
+        };
+      };
+
+      hydraJobs = { inherit (self) packages docker; };
     };
 }
