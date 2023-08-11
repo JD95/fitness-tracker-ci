@@ -5,11 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     backend.url = "github:JD95/fitness-tracker-web-backend";
     frontend.url = "github:JD95/fitness-tracker-web-frontend";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, backend, frontend, ... }@inputs:
-    let 
+  outputs = { self, nixpkgs, backend, frontend, ... }@inputs:
+    let
       package = system: drvAttrs {
         nixpkgs = inputs.nixpkgs.legacyPackages.${system};
         backendDrv = backend.outputs.packages.${system}.default;
@@ -21,9 +20,9 @@
           name = "fitness-tracker";
 
           buildInputs = [ backendDrv frontendDrv ];
-       
-          backend = backendDrv; 
-          frontend = frontendDrv; 
+
+          backend = backendDrv;
+          frontend = frontendDrv;
 
           unpackPhase = ''
             printenv
@@ -31,7 +30,7 @@
             mkdir -p out/bin/
             mkdir -p out/bin/frontend
             cp -r $backend/bin/* out/bin
-            cp -r $frontend/* out/bin/frontend 
+            cp -r $frontend/* out/bin/frontend
             '';
 
           installPhase = ''
