@@ -59,7 +59,7 @@
 
         copyToRoot = nixpkgs.buildEnv {
           name = "image-root";
-          paths = [ backendDrv frontendDrv ];
+          paths = [ self.outputs.packages."x86_64-linux".default ];
           pathsToLink = [ "/bin" ];
         };
 
