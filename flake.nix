@@ -9,13 +9,14 @@
 
   outputs = { self, nixpkgs, backend, frontend, ... }@inputs:
     let
-      package = system: drvAttrs {
+      forSystem = system: f: f {
+        outputPackages = self.outputs.packages.${system};
         nixpkgs = inputs.nixpkgs.legacyPackages.${system};
         backendDrv = backend.outputs.packages.${system}.default;
         frontendDrv = frontend.outputs.packages.${system}.default;
       };
 
-      drvAttrs = { nixpkgs, backendDrv, frontendDrv }:
+      package = { nixpkgs, backendDrv, frontendDrv, ... }:
         nixpkgs.stdenv.mkDerivation {
           name = "fitness-tracker";
 
@@ -39,10 +40,8 @@
           '';
       };
 
-    in {
-      packages."x86_64-linux".default = package "x86_64-linux";
-
-      packages."x86_64-linux".docker = nixpkgs.dockerTools.buildImage {
+      docker = { outputPackages, nixpkgs, ... }:
+        nixpkgs.dockerTools.buildImage {
         name = "fitness-server";
 
         tag = "latest";
@@ -57,21 +56,27 @@
           arch = "x86_64";
         };
 
+        fromImageName = "alpine-glibc";
+
         copyToRoot = nixpkgs.buildEnv {
           name = "image-root";
-          paths = [ self.outputs.packages."x86_64-linux".default ];
+          paths = [ 
+            outputPackages.default 
+            nixpkgs.sqlite
+            nixpkgs.gmp
+          ];
           pathsToLink = [ "/bin" ];
         };
-
-        extraCommands = ''
-        apk add sqlite sqlite-dev gmp
-        '';
 
         config = {
           Cmd = [ "fitness-tracker" ];
         };
       };
 
-      hydraJobs = { inherit (self) packages docker; };
+
+    in {
+      packages."x86_64-linux".default = forSystem "x86_64-linux" package;
+      packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
+      hydraJobs = { inherit (self) packages; };
     };
 }
