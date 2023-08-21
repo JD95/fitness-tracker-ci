@@ -73,10 +73,18 @@
         };
       };
 
+    devShell = {nixpkgs, ...}: nixpkgs.mkShell {
+        buildInputs = [ 
+          nixpkgs.dhall 
+          nixpkgs.dhall-json 
+          nixpkgs.dhall-bash
+        ];
+    };
 
     in {
       packages."x86_64-linux".default = forSystem "x86_64-linux" package;
       packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
+      devShells."x86_64-linux".default = forSystem "x86_64-linux" devShell;
       hydraJobs = { inherit (self) packages; };
     };
 }

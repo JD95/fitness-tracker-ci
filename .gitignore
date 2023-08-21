@@ -1,3 +1,4 @@
 *undo-tree~
 kubernetes/**/*.yaml
 /result
+*/.history
