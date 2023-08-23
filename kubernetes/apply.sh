@@ -1,7 +1,7 @@
 function apply_config() {
   eval $(dhall-to-bash --declare obj_name <<< "($dir/$1.dhall).metadata.name")
   kubectl delete $1 $obj_name
-  kubectl apply -f $dir/deployment.yaml
+  kubectl apply -f $dir/$1.yaml
 }
 
 for dir in ./*/
