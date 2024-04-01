@@ -6,11 +6,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1690738586,
-        "narHash": "sha256-Ko0xVymIafX4vbtR5BLe5G68vlvezWGRhgk75lLNIDI=",
+        "lastModified": 1711997663,
+        "narHash": "sha256-lAOK7RmNxeHTkjaIPqsIM9ktI32wSIuDY1AFgbA+0CI=",
         "owner": "JD95",
         "repo": "fitness-tracker-web-backend",
-        "rev": "49d14a12d9ce529926dd9811b32f05bd373420fc",
+        "rev": "8db4930946383956972b92fc49e879e14d50d58c",
         "type": "github"
       },
       "original": {
@@ -110,11 +110,11 @@
         "spago2nix": "spago2nix"
       },
       "locked": {
-        "lastModified": 1691517061,
-        "narHash": "sha256-2SAwKpiWLVLjZVpTjVetWZYkqO69yCAMthOZ75iiBOE=",
+        "lastModified": 1711998629,
+        "narHash": "sha256-XKQusgUquYplsr5mAVwrkAgXeXA9dmsfY5S9oCcvA08=",
         "owner": "JD95",
         "repo": "fitness-tracker-web-frontend",
-        "rev": "9ed7e18e7a6e36c501f4ec56617c2fbda5689d51",
+        "rev": "c484c85f14cadc43a0c21251c9cbe4cc8743a7f3",
         "type": "github"
       },
       "original": {
@@ -173,11 +173,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1691654369,
-        "narHash": "sha256-gSILTEx1jRaJjwZxRlnu3ZwMn1FVNk80qlwiCX8kmpo=",
+        "lastModified": 1711703276,
+        "narHash": "sha256-iMUFArF0WCatKK6RzfUJknjem0H9m4KgorO/p3Dopkk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ce5e4a6ef2e59d89a971bc434ca8ca222b9c7f5e",
+        "rev": "d8fe5e6c92d0d190646fb9f1056741a229980089",
         "type": "github"
       },
       "original": {
