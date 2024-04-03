@@ -85,9 +85,13 @@
       let nixpkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
       in nixpkgs.writeScript "action" '' 
         #!${nixpkgs.runtimeShell}
-        ${nixpkgs.skopeo}/bin/skopeo copy \
-         docker-archive://${self.packages."x86_64-linux".docker} \
-         docker://docker.io/jdwyer95/fitness-server:latest > $out
+        IMAGE_PATH="${self.packages."x86_64-linux".docker}"
+        DEST="docker.io/jdwyer95/fitness-server:latest" 
+        echo "Image: $IMAGE_PATH"
+        echo "Pushing to $DEST"
+        ${nixpkgs.skopeo}/bin/skopeo copy \ 
+          docker-archive://$IMAGE_PATH \ 
+          docker://$DEST 
       '';
 
     in {
