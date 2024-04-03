@@ -100,7 +100,6 @@
       hydraJobs = { 
         inherit (self) packages; 
         runCommandHook = { 
-          recurseForDerivations = true; 
           pushDockerImage = pushDockerImageScript; 
         };
       };
