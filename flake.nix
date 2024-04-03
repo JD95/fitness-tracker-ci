@@ -87,8 +87,8 @@
         #!${nixpkgs.runtimeShell}
         IMAGE_PATH="${self.packages."x86_64-linux".docker}"
         DEST="docker.io/jdwyer95/fitness-server:latest" 
-        echo "Image: $IMAGE_PATH"
-        echo "Pushing to $DEST"
+        # echo "Image: $IMAGE_PATH"
+        # echo "Pushing to $DEST"
         ${nixpkgs.skopeo}/bin/skopeo copy docker-archive://$IMAGE_PATH docker://$DEST 
       '';
 
