@@ -87,7 +87,7 @@
         #!${nixpkgs.runtimeShell}
         ${nixpkgs.skopeo}/bin/skopeo copy \
          docker-archive://${self.packages."x86_64-linux".docker} \
-         docker://docker.io/jdwyer95/fitness-server:latest 
+         docker://docker.io/jdwyer95/fitness-server:latest > $out
       '';
 
     in {
