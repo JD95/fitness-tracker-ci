@@ -89,9 +89,7 @@
         DEST="docker.io/jdwyer95/fitness-server:latest" 
         echo "Image: $IMAGE_PATH"
         echo "Pushing to $DEST"
-        ${nixpkgs.skopeo}/bin/skopeo copy \ 
-          docker-archive://$IMAGE_PATH \ 
-          docker://$DEST 
+        ${nixpkgs.skopeo}/bin/skopeo copy docker-archive://$IMAGE_PATH docker://$DEST 
       '';
 
     in {
@@ -101,7 +99,10 @@
       inherit pushDockerImageScript;
       hydraJobs = { 
         inherit (self) packages; 
-        runCommand = { pushDockerImage = pushDockerImageScript; };
+        runCommand = { 
+          recurseForDerivations = true; 
+          pushDockerImage = pushDockerImageScript; 
+        };
       };
     };
 }
