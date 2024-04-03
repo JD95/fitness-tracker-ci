@@ -81,10 +81,23 @@
         ];
     };
 
+    pushDockerImageScript = 
+      let nixpkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+      in nixpkgs.writeScript "action" '' 
+        #!${nixpkgs.runtimeShell}
+        ${nixpkgs.skopeo}/bin/skopeo copy \
+         docker-archive://${self.packages."x86_64-linux".docker} \
+         docker://docker.io/jdwyer95/fitness-server:latest 
+      '';
+
     in {
       packages."x86_64-linux".default = forSystem "x86_64-linux" package;
       packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
       devShells."x86_64-linux".default = forSystem "x86_64-linux" devShell;
-      hydraJobs = { inherit (self) packages; };
+      inherit pushDockerImageScript;
+      hydraJobs = { 
+        inherit (self) packages; 
+        runCommand = { pushDockerImage = pushDockerImageScript; };
+      };
     };
 }
