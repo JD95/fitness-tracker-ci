@@ -99,7 +99,7 @@
       inherit pushDockerImageScript;
       hydraJobs = { 
         inherit (self) packages; 
-        runCommand = { 
+        runCommandHook = { 
           recurseForDerivations = true; 
           pushDockerImage = pushDockerImageScript; 
         };
