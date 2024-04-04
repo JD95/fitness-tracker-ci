@@ -112,7 +112,7 @@
       packages."x86_64-linux".default = forSystem "x86_64-linux" package;
       packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
       devShells."x86_64-linux".default = forSystem "x86_64-linux" devShell;
-      pushImage = withExecuteLog "fitness-tracker-push-image" pushDockerImageScript;
+      pushImage = executeWithLog "fitness-tracker-push-image" pushDockerImageScript;
       hydraJobs = { 
         inherit (self) packages; 
         runCommandHook = { inherit pushImage; };
