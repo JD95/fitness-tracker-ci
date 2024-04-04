@@ -87,7 +87,7 @@
       let 
         id = pkgs.lib.escapeShellArg "hydra-${name}";
       in pkgs.writeScript "run-with-log-${name}" ''
-        #!{pkgs.runtimeShell}
+        #!${pkgs.runtimeShell}
         set -e
         echo "Executing " ${pkgs.lib.escapeShellArg program} ", logs will appear in the systemd journal. View those logs with:" >&2
         echo "journalctl --identifier ${id}" >&2
@@ -107,12 +107,13 @@
       ${pkgs.skopeo}/bin/skopeo copy docker-archive://$IMAGE_PATH docker://$DEST
       echo "done"
     '';
+    pushImage = executeWithLog "fitness-tracker-push-image" pushDockerImageScript;
 
     in {
       packages."x86_64-linux".default = forSystem "x86_64-linux" package;
       packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
       devShells."x86_64-linux".default = forSystem "x86_64-linux" devShell;
-      pushImage = executeWithLog "fitness-tracker-push-image" pushDockerImageScript;
+      inherit pushImage;
       hydraJobs = { 
         inherit (self) packages; 
         runCommandHook = { inherit pushImage; };
