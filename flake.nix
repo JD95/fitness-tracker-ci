@@ -99,7 +99,7 @@
       #!${pkgs.runtimeShell}
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
       DEST="docker.io/jdwyer95/fitness-server:latest"
-      SECRETS="$(${pkgs.sops}/bin/sops -decrypt /home/hydra/secrets/passwords.yaml)"
+      SECRETS="$(${pkgs.sops}/bin/sops --decrypt /home/hydra/secrets/passwords.yaml)"
       PASS="$(echo "$SECRETS" | ${pkgs.yq}/bin/yq ".passwords.dockerhub")"
 
       echo "logging into docker..."
