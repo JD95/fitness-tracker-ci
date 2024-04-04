@@ -99,11 +99,7 @@
       #!${pkgs.runtimeShell}
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
       DEST="docker.io/jdwyer95/fitness-server:latest"
-      
-      cat /etc/nixos/secrets/passwords.yaml > passwords.yaml
-      cat /etc/nixos/secrets/passwords.yaml > .sops.yaml
-
-      SECRETS="$(${pkgs.sops}/bin/sops --decrypt passwords.yaml)"
+      SECRETS="$(${pkgs.sops}/bin/sops --config /etc/nixos/secrets/.sops.yaml --decrypt /etc/nixos/secrets/passwords.yaml)"
       PASS="$(echo "$SECRETS" | ${pkgs.yq}/bin/yq ".passwords.dockerhub")"
 
       echo "logging into docker..."
