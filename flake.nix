@@ -83,6 +83,18 @@
   
     pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
 
+    executeWithLog = name: program:
+      let 
+        id = pkgs.lib.escapeShellArg "hydra-${name}";
+      in pkgs.writeScript "run-with-log-${name}" ''
+        #!{pkgs.runtimeShell}
+        set -e
+        echo "Executing " ${pkgs.lib.escapeShellArg program} ", logs will appear in the systemd journal. View those logs with:" >&2
+        echo "journalctl --identifier ${id}" >&2
+        echo "Starting ${pkgs.lib.escapeShellArg program}..." | ${pkgs.systemd}/bin/systemd-cat --identifier ${id}
+        ${pkgs.systemd}/bin/systemd-cat --identifier ${id} ${pkgs.lib.escapeShellArg program}
+      '';
+
     pushDockerImageScript = pkgs.writeScript "push-image" '' 
       #!${pkgs.runtimeShell}
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
@@ -104,7 +116,7 @@
       hydraJobs = { 
         inherit (self) packages; 
         runCommandHook = { 
-          pushImage = pushDockerImageScript; 
+          pushImage = executeWithLog "fitness-server-image-push" pushDockerImageScript; 
         };
       };
     };
