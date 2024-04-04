@@ -99,8 +99,13 @@
       #!${pkgs.runtimeShell}
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
       DEST="docker.io/jdwyer95/fitness-server:latest"
-      SECRETS="$(${pkgs.sops}/bin/sops --config /etc/nixos/.sops.yaml --decrypt /etc/nixos/secrets/passwords.yaml)"
+      
+      cat /etc/nixos/secrets/passwords.yaml > passwords.yaml
+      cat /etc/nixos/secrets/passwords.yaml > .sops.yaml
+
+      SECRETS="$(${pkgs.sops}/bin/sops --decrypt passwords.yaml)"
       PASS="$(echo "$SECRETS" | ${pkgs.yq}/bin/yq ".passwords.dockerhub")"
+
       echo "logging into docker..."
       ${pkgs.skopeo}/bin/skopeo login docker.io --username jdwyer95 --password $(eval echo $PASS)
       echo "copying images..."
