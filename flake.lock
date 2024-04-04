@@ -110,11 +110,11 @@
         "spago2nix": "spago2nix"
       },
       "locked": {
-        "lastModified": 1712002131,
-        "narHash": "sha256-WYN+/YIQzAx40qU+UBg8JpR8yjm0IRPuguMbdMikUQM=",
+        "lastModified": 1712204962,
+        "narHash": "sha256-2SAwKpiWLVLjZVpTjVetWZYkqO69yCAMthOZ75iiBOE=",
         "owner": "JD95",
         "repo": "fitness-tracker-web-frontend",
-        "rev": "440bc4d582461866fb13fb32cc25708900e3c5c3",
+        "rev": "e7d9daf085bb92e66ee06964860f226c21dfe34d",
         "type": "github"
       },
       "original": {
