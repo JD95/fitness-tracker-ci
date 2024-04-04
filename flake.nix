@@ -98,12 +98,9 @@
     pushDockerImageScript = pkgs.writeScript "push-image.sh" '' 
       #!${pkgs.runtimeShell}
 
-      echo "$USER"
-      ls -la
-
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
       DEST="docker.io/jdwyer95/fitness-server:latest"
-      SECRETS="$(${pkgs.sops}/bin/sops --decrypt secrets/passwords.yaml)"
+      SECRETS="$(${pkgs.sops}/bin/sops --decrypt /var/lib/hydra/queue-runner/secrets/passwords.yaml)"
       PASS="$(echo "$SECRETS" | ${pkgs.yq}/bin/yq ".passwords.dockerhub")"
 
       echo "logging into docker..."
