@@ -81,17 +81,15 @@
         ];
     };
 
-    pushDockerImageScript = 
-      let nixpkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
-      in nixpkgs.writeScript "image-push" '' 
-        #!${nixpkgs.runtimeShell}
-        IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
-        DEST="docker.io/jdwyer95/fitness-server:latest"
-        SECRETS="$(${nixpkgs.sops}/bin/sops --config /etc/nixos/.sops.yaml --decrypt /etc/nixos/secrets/passwords.yaml)"
-        PASS="$(echo "$SECRETS" | ${nixpkgs.yq}/bin/yq ".passwords.dockerhub")"
-        ${nixpkgs.skopeo}/bin/skopeo login docker.io --username jdwyer95 --password $(eval echo $PASS)
-        ${nixpkgs.skopeo}/bin/skopeo copy docker-archive://$IMAGE_PATH docker://$DEST
-      '';
+    pushDockerImageScript = '' 
+      #!${nixpkgs.runtimeShell}
+      IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
+      DEST="docker.io/jdwyer95/fitness-server:latest"
+      SECRETS="$(${nixpkgs.sops}/bin/sops --config /etc/nixos/.sops.yaml --decrypt /etc/nixos/secrets/passwords.yaml)"
+      PASS="$(echo "$SECRETS" | ${nixpkgs.yq}/bin/yq ".passwords.dockerhub")"
+      ${nixpkgs.skopeo}/bin/skopeo login docker.io --username jdwyer95 --password $(eval echo $PASS)
+      ${nixpkgs.skopeo}/bin/skopeo copy docker-archive://$IMAGE_PATH docker://$DEST
+    '';
 
     in {
       packages."x86_64-linux".default = forSystem "x86_64-linux" package;
