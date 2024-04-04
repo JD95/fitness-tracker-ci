@@ -95,7 +95,7 @@
         ${pkgs.systemd}/bin/systemd-cat --identifier ${id} ${pkgs.lib.escapeShellArg program}
       '';
 
-    pushDockerImageScript = pkgs.writeScript "push-image" '' 
+    pushDockerImageScript = "push-image" '' 
       #!${pkgs.runtimeShell}
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
       DEST="docker.io/jdwyer95/fitness-server:latest"
@@ -112,11 +112,11 @@
       packages."x86_64-linux".default = forSystem "x86_64-linux" package;
       packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
       devShells."x86_64-linux".default = forSystem "x86_64-linux" devShell;
-      pushImage = pushDockerImageScript;
+      pushImage = pkgs.writeScript pushDockerImageScript;
       hydraJobs = { 
         inherit (self) packages; 
         runCommandHook = { 
-          pushImage = executeWithLog "fitness-server-image-push" pushDockerImageScript; 
+          pushImage = pkgs.runCommand "push-image" { } pushDockerImageScript;
         };
       };
     };
