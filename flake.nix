@@ -95,7 +95,7 @@
         ${pkgs.systemd}/bin/systemd-cat --identifier ${id} ${pkgs.lib.escapeShellArg program}
       '';
 
-    pushDockerImageScript = "push-image" '' 
+    pushDockerImageScript = '' 
       #!${pkgs.runtimeShell}
       IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
       DEST="docker.io/jdwyer95/fitness-server:latest"
