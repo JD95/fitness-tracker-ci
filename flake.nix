@@ -1,5 +1,5 @@
 {
-  description = "fitness trakcer frontend";
+  description = "fitness tracker";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -29,9 +29,9 @@
             printenv
             mkdir -p out
             mkdir -p out/bin/
-            mkdir -p out/bin/frontend
+            mkdir -p out/frontend
             cp -r $backend/bin/* out/bin
-            cp -r $frontend/* out/bin/frontend
+            cp -r $frontend/* out/frontend
             '';
 
           installPhase = ''
@@ -60,12 +60,12 @@
 
         copyToRoot = nixpkgs.buildEnv {
           name = "image-root";
-          paths = [ 
-            outputPackages.default 
+          paths = [
+            outputPackages.default
             nixpkgs.sqlite
             nixpkgs.gmp
           ];
-          pathsToLink = [ "/bin" ];
+          pathsToLink = [ "/bin" "/frontend" ];
         };
 
         config = {
@@ -74,17 +74,17 @@
       };
 
     devShell = {nixpkgs, ...}: nixpkgs.mkShell {
-        buildInputs = [ 
-          nixpkgs.dhall 
-          nixpkgs.dhall-json 
+        buildInputs = [
+          nixpkgs.dhall
+          nixpkgs.dhall-json
           nixpkgs.dhall-bash
         ];
     };
-  
+
     pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
 
     executeWithLog = name: program:
-      let 
+      let
         id = pkgs.lib.escapeShellArg "hydra-${name}";
       in pkgs.writeScript "run-with-log-${name}" ''
         #!${pkgs.runtimeShell}
@@ -95,10 +95,10 @@
         ${pkgs.systemd}/bin/systemd-cat --identifier ${id} ${pkgs.lib.escapeShellArg program}
       '';
 
-    pushDockerImageScript = pkgs.writeScript "push-image.sh" '' 
+    pushDockerImageScript = pkgs.writeScript "push-image.sh" ''
       #!${pkgs.runtimeShell}
 
-      IMAGE_PATH="${self.packages."x86_64-linux".docker}" 
+      IMAGE_PATH="${self.packages."x86_64-linux".docker}"
       DEST="docker.io/jdwyer95/fitness-server:latest"
       SECRETS="$(${pkgs.sops}/bin/sops --decrypt /var/lib/hydra/queue-runner/secrets/passwords.yaml)"
       PASS="$(echo "$SECRETS" | ${pkgs.yq}/bin/yq ".passwords.dockerhub")"
@@ -116,8 +116,8 @@
       packages."x86_64-linux".docker = forSystem "x86_64-linux" docker;
       devShells."x86_64-linux".default = forSystem "x86_64-linux" devShell;
       inherit pushImage;
-      hydraJobs = { 
-        inherit (self) packages; 
+      hydraJobs = {
+        inherit (self) packages;
         runCommandHook = { inherit pushImage; };
       };
     };
