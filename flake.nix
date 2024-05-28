@@ -3,8 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    backend.url = "github:JD95/fitness-tracker-web-backend";
-    frontend.url = "github:JD95/fitness-tracker-web-frontend";
+
+    backend = {
+      url = "github:JD95/fitness-tracker-web-backend?rev=a66ac3b2ad04c2e48a7861167fe447b15f29ee6e";
+    };
+
+    frontend = {
+      url = "github:JD95/fitness-tracker-web-frontend?rev=e7d9daf085bb92e66ee06964860f226c21dfe34d";
+    };
   };
 
   outputs = { self, nixpkgs, backend, frontend, ... }@inputs:

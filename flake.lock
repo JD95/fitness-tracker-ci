@@ -6,16 +6,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1712002162,
-        "narHash": "sha256-Ko0xVymIafX4vbtR5BLe5G68vlvezWGRhgk75lLNIDI=",
+        "lastModified": 1716938889,
+        "narHash": "sha256-So43RAqrjqEcDNISfd8MN8Fnt5y8XbXIaTKrqWNhlws=",
         "owner": "JD95",
         "repo": "fitness-tracker-web-backend",
-        "rev": "95c91e885ee6bd36b85a9bd1c624e7af9ac61a69",
+        "rev": "a66ac3b2ad04c2e48a7861167fe447b15f29ee6e",
         "type": "github"
       },
       "original": {
         "owner": "JD95",
         "repo": "fitness-tracker-web-backend",
+        "rev": "a66ac3b2ad04c2e48a7861167fe447b15f29ee6e",
         "type": "github"
       }
     },
@@ -120,6 +121,7 @@
       "original": {
         "owner": "JD95",
         "repo": "fitness-tracker-web-frontend",
+        "rev": "e7d9daf085bb92e66ee06964860f226c21dfe34d",
         "type": "github"
       }
     },
