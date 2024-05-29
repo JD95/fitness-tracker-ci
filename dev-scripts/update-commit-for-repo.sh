@@ -2,4 +2,5 @@ HOST="github"
 REPO_USER="JD95"
 REPO_NAME="$1"
 NEW_COMMIT="$2"
-sed -E "s/\"$HOST:$REPO_USER\/$REPO_NAME\?rev=(.*)\"/\"$HOST:$REPO_USER\/$REPO_NAME?rev=$NEW_COMMIT\"/"
+TARGET_FILE="$3"
+sed -i -E "s/\"$HOST:$REPO_USER\/$REPO_NAME\?rev=(.*)\"/\"$HOST:$REPO_USER\/$REPO_NAME?rev=$NEW_COMMIT\"/" $TARGET_FILE

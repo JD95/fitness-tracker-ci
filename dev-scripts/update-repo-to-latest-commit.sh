@@ -1,6 +1,9 @@
 SCRIPT_DIR=$(dirname "$0")
-REPO_NAME="fitness-tracker-web-backend"
+TARGET_FILE="$1"
+REPO_NAME="$2"
 
 LATEST_COMMIT="$(./$SCRIPT_DIR/get-latest-commit-for-repo.sh $REPO_NAME)"
 
-./$SCRIPT_DIR/update-commit-for-repo.sh $REPO_NAME $LATEST_COMMIT
+echo "Updating $REPO_NAME to commit '$LATEST_COMMIT'"
+
+./$SCRIPT_DIR/update-commit-for-repo.sh $REPO_NAME $LATEST_COMMIT $TARGET_FILE 
