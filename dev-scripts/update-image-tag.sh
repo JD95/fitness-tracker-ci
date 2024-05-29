@@ -1,0 +1,5 @@
+USER="jdwyer95"
+IMAGE_NAME="$1"
+NEW_TAG="$2"
+TARGET_FILE="$3"
+sed -i -E "s/\"$USER\/$IMAGE_NAME\:(.*)\"/\"$USER\/$IMAGE_NAME:$NEW_TAG\"/" $TARGET_FILE
