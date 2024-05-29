@@ -5,7 +5,7 @@ let deploymentLabel = toMap { app = "fitness-tracker" }
 let serverContainer =
       kubernetes.Container::{
       , name = "fitness-tracker"
-      , image = Some "jdwyer95/fitness-server:0affe74c38c19420e48552fcd600ef911887c3bc"
+      , image = Some "jdwyer95/fitness-server:a5b6909c9e7421a45e66ac9afc6b7950cb4234e5"
       , imagePullPolicy = Some "IfNotPresent"
       , ports = Some [ kubernetes.ContainerPort::{ containerPort = 8081 } ]
       }
